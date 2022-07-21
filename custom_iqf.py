@@ -469,7 +469,7 @@ class DSModifierFSRCNN(DSModifier):
         sigma = 0.5 * args.scale
         kernel_size = math.ceil(sigma * 3 + 4)
         kernel_tensor = kornia.filters.get_gaussian_kernel2d((kernel_size, kernel_size), (sigma, sigma))
-        image_blur = kornia.filter2d(img_tensor, kernel_tensor[None])
+        image_blur = kornia.filters.filter2d(img_tensor, kernel_tensor[None])
         image = transforms.ToPILImage()(image_blur.squeeze_(0))
         ########
 
@@ -894,7 +894,7 @@ class SimilarityMetrics( Metric ):
             sigma = 0.5*scale
             kernel_size = 9
             kernel_tensor = kornia.filters.get_gaussian_kernel2d((kernel_size, kernel_size), (sigma, sigma))
-            gt = torch.clamp( kornia.filter2d(img_tensor, kernel_tensor[None]), min=0.0, max=1.0 )
+            gt = torch.clamp( kornia.filters.filter2d(img_tensor, kernel_tensor[None]), min=0.0, max=1.0 )
         
         results_dict = {
             "ssim":None,

@@ -32,17 +32,18 @@ RUN ln -sf /bin/python3.6 /bin/python3
 
 RUN pip3 install pip --upgrade
 
-WORKDIR /sisr
+WORKDIR /iqf
 
 RUN pip3 install git+https://github.com/satellogic/iquaflow.git
 
 COPY requirements.txt ./
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-RUN pip3 install torch==1.7.0+cu110 torchvision==0.8.1+cu110 -f https://download.pytorch.org/whl/torch_stable.html
+#RUN pip3 install torch==1.7.0+cu110 torchvision==0.8.1+cu110 -f https://download.pytorch.org/whl/torch_stable.html
+RUN pip3 install torch==1.9.0+cu111 torchvision==0.10.0+cu111 -f https://download.pytorch.org/whl/torch_stable.html
 
 RUN pip3 install rasterio==1.2.6
-RUN pip3 install kornia --no-deps
+RUN pip3 install kornia==0.5.0 --no-deps
 
 CMD ["/bin/bash"]
 

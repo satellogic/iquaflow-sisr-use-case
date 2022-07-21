@@ -24,7 +24,7 @@ def generate_lowres(image_file,scale=3):
     sigma = 0.5 * scale
     kernel_size = math.ceil(sigma * 3 + 4)
     kernel_tensor = kornia.filters.get_gaussian_kernel2d((kernel_size, kernel_size), (sigma, sigma))
-    image_blur = kornia.filter2d(img_tensor, kernel_tensor[None])
+    image_blur = kornia.filters.filter2d(img_tensor, kernel_tensor[None])
     image = transforms.ToPILImage()(image_blur.squeeze_(0))
     image = image.resize((int(image.width // scale), int(image.height // scale)), resample=pil_image.BICUBIC)
 

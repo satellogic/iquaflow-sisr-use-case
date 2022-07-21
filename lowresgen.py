@@ -395,7 +395,7 @@ if __name__ == "__main__":
             kernel_size=+1
 
         kernel_tensor = kornia.filters.get_gaussian_kernel2d((kernel_size,kernel_size), (sigma, sigma))
-        blurred = kornia.filter2d(img, kernel_tensor[None])
+        blurred = kornia.filters.filter2d(img, kernel_tensor[None])
         blurred_resize = kornia.geometry.rescale(blurred, 1/scale, 'bicubic')
         print(blurred_resize.size())
         blurred_resize = blurred_resize.numpy()[0].transpose(1,2,0).astype(np.uint8)

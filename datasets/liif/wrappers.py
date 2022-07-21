@@ -122,7 +122,7 @@ class SRImplicitDownsampled(Dataset):
         elif kernel_size == 10:
             kernel_size = 11
         kernel_tensor = kornia.filters.get_gaussian_kernel2d((kernel_size, kernel_size), (sigma, sigma))
-        blurred = kornia.filter2d(crop_hr_Bdim, kernel_tensor[None])
+        blurred = kornia.filters.filter2d(crop_hr_Bdim, kernel_tensor[None])
         #######
 
         if self.inp_size is None:

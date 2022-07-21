@@ -14,7 +14,8 @@ import numpy as np
 from iquaflow.datasets import DSWrapper
 from iquaflow.experiments import ExperimentInfo, ExperimentSetup
 from iquaflow.experiments.task_execution import PythonScriptTaskExecution
-from iquaflow.metrics import RERMetric, SNRMetric
+from iquaflow.metrics import SNRMetric
+from iquaflow.metrics import SharpnessMetric as RERMetric
 
 from custom_iqf import DSModifierMSRN, DSModifierFSRCNN,  DSModifierLIIF, DSModifierESRGAN
 from custom_iqf import SimilarityMetrics
@@ -112,10 +113,8 @@ print('Calculating RER Metric...')
 _ = experiment_info.apply_metric_per_run(
     RERMetric(
         experiment_info,
-        win=16,
-        stride=16,
         ext="tif",
-        n_jobs=15
+        window_size=64, 
     ),
     ds_wrapper.json_annotations,
 )
@@ -125,17 +124,18 @@ print('Calculating SNR Metric...')
 __ = experiment_info.apply_metric_per_run(
      SNRMetric(
          experiment_info,
-         n_jobs=15,
-         ext="tif",
-         patch_sizes=[30],
-         confidence_limit=50.0
+         ext="tif"
      ),
      ds_wrapper.json_annotations,
  )
 
 df = experiment_info.get_df(
     ds_params=["modifier"],
-    metrics=['ssim','psnr','swd','snr','fid','rer_0','rer_1','rer_2'],
+    metrics=[
+        'ssim','psnr','swd',"snr_median", "snr_mean", "snr_std",
+        'fid','FWHM_Y', 'MTF_NYQ_X', 'MTF_halfNYQ_X', 'MTF_halfNYQ_other',
+         'RER_Y', 'RER_other', 'RER_X', 'FWHM_other', 'MTF_NYQ_other'
+         ],
     dropna=False
 )
 

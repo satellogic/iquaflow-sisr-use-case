@@ -1,4 +1,4 @@
-PROJ_NAME=sisr
+PROJ_NAME=iquaflow
 CONTAINER_NAME="${PROJ_NAME}-${USER}"
 
 ifndef DS_VOLUME
@@ -13,9 +13,6 @@ ifndef MLF_PORT
 	MLF_PORT=5000
 endif
 
-PROJ_NAME=sisr
-CONTAINER_NAME="${PROJ_NAME}-${USER}"
-
 help:
 	@echo "build -- builds the docker image"
 	@echo "dockershell -- raises an interactive shell docker"
@@ -29,14 +26,14 @@ build:
 
 dockershell:
 	docker run --rm --name $(CONTAINER_NAME) --gpus all -p 9198:9198 \
-	-v $(shell pwd):/sisr -v $(DS_VOLUME):/scratch \
-	-it sisr
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/scratch \
+	-it $(PROJ_NAME)
 
 notebookshell:
 	docker run --gpus all --privileged -itd --rm --name $(CONTAINER_NAME)-nb \
 	-p ${NB_PORT}:${NB_PORT} \
-	-v $(shell pwd):/sisr -v $(DS_VOLUME):/scratch \
-	sisr \
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/scratch \
+	$(PROJ_NAME) \
 	jupyter notebook \
 	--NotebookApp.token='sisr' \
 	--no-browser \
@@ -47,6 +44,6 @@ notebookshell:
 mlflow:
 	docker run --privileged -itd --rm --name $(CONTAINER_NAME)-mlf \
 	-p ${MLF_PORT}:${MLF_PORT} \
-	-v $(shell pwd):/sisr -v $(DS_VOLUME):/scratch \
-	sisr \
+	-v $(shell pwd):/iqf -v $(DS_VOLUME):/scratch \
+	$(PROJ_NAME) \
 	mlflow ui --host 0.0.0.0:${MLF_PORT}
